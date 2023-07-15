@@ -18,7 +18,7 @@ jobs:
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.DROPLET_PASSPHRASE_SECRET }}
+          #SSH_PRIVATE_KEY: ${{ secrets.DROPLET_PASSPHRASE_SECRET }}
           ARGS: "-rlgoDzvc -i"
           SOURCE: "public/"
           REMOTE_HOST: ${{ secrets.DROPLET_HOST_SECRET}}
