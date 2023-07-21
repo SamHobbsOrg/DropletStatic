@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Notes for my site</title>
+<link rel="stylesheet" href="stylesheet.css">
+<style>
+    h1 {
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+<h1>Notes for my site</h1>
+<p>To SSH to the droplet, from the droplet's page, copy the IP from the
+	top-left then use <span class='inlcode'>ssh user@ipaddress</span>. Also,
+	it is possible to browse the server in the droplet using the same
+	IP address.</p>
+
+<h2>.Net</h2>
+<p>Use the following to install .Net.</p>
+<div class='codeblock'>
+sudo snap install dotnet-runtime-60 --classic
+sudo snap alias dotnet-runtime-60.dotnet dotnet</div>
+<p>Edit the Bash Shell profile (either
+	<span class='inlcode'>~/.bash_profile</span> or
+	<span class='inlcode'>~/.bashrc</span>) and add:</p>
+<span class='inlcode'>export DOTNET_ROOT=/snap/dotnet-sdk/current</span>
+<p>If you get errors that include a message saying <i>remote certificate is
+	invalid</i> then use the following commands (certificate location will
+	vary by distro).</p>
+<div class='codeblock'>export SSL_CERT_FILE=[path-to-certificate-file]
+export SSL_CERT_DIR=/dev/null</div>
+
+<h2>Nginx</h2>
+<p>Use the following to install Nginx.</p>
+<div class='codeblock'>sudo apt-get install nginx</div>
+<p>The Nginx Web server default location is
+	<span class='inlcode'>/var/www/html</span>.</p>
+<p>The Nginx configuration file is at
+<span class='inlcode'>/etc/nginx/html</span>.</p>
+<p>The Nginx sites-available directory is at
+	<span class='inlcode'>/etc/nginx</span>.</p>
+
+<h2>Docker</h2>
+<p>Use the following to check if Docker is installed.</p>
+<div class='codeblock'>sudo service docker start
+sudo docker run hello-world</div>
+<p>If Docker is not installed then install it using
+	<a href="https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository">
+		Install Docker Engine on Ubuntu | Docker Documentation</a>.</p>
+
+<h2>SQL Server</h2>
+<p>Use the following to install SQL Server.</p>
+<div class='codeblock'>sudo docker pull mcr.microsoft.com/mssql/server:2022-latest</div>
+<p>Use the following to start SQL Server.</p>
+<div class='codeblock'>sudo docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<YourStrong@Passw0rd>" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest</div>
+<p>Connect to the server using:</p>
+<div class='codeblock'>sudo docker exec -it sql1 "bash"</div>
+<p>From inside the container, connect locally with sqlcmd, using its full path.</p>
+<div class='codeblock'>/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "<YourNewStrong@Passw0rd>"</div>
+<p>To connect from Windows, install sqlcmd into Windows.</p>
+<p>To connect using VS SSOE, first in "Tools" | "Options" select "Cross Platform"
+	| "Connection Manager" and enter the IP address and the root user and
+	password. Then connect to the server using SSOE.</p>
+
+<h2>Hosting a website</h2>
+<p>See <a href="https://www.youtube.com/watch?v=C4OlImpLLjw">
+	How to host a website on digital ocean with nginx - YouTube</a></p>
+<p>Create a configuration file using:</p>
+<div class='codeblock'>sudo nano /etc/nginx/sites-available/c-sharpcorner.net</div>
+<p>Test the configuration file using:</p>
+<div class='codeblock'>sudo nginx -t</div>
+<p>Restart nginx using:</p>
+<div class='codeblock'>sudo systemctl restart nginx</div>
+
+<h2>Notes from CodingForEntrepreneurs</h2>
+
+<p>From <a href="https://www.codingforentrepreneurs.com/blog/git-push-local-code-to-live-linux-server">
+	Git Push Local Code to Live Linux Server - Blog Post - codingforentrepreneurs.com</a></p>
+<pre><blockquote>└── CodingForEntrepreneurs
+└── .git
+	├── branches
+	├── hooks
+	├── info
+	├── objects
+	│   ├── info
+	│   └── pack
+	└── refs
+		├── heads
+		└── tags</blockquote></pre>
+
+<p>Create the directories using:</p>
+<pre><blockquote>cd /var/SampleProjects
+mkdir CodingForEntrepreneurs
+cd CodingForEntrepreneurs
+mkdir .git
+cd .git
+git init --bare</blockquote></pre>
+
+<p>Create more directories using:</p>
+<pre><blockquote>cd /var/www
+mkdir CodingForEntrepreneurs
+cd /var/SampleProjects/CodingForEntrepreneurs/.git/hooks</blockquote></pre>
+
+<p>Use <span class="inlcode">ls -al</span> to check the files. Then use
+	<span class="inlcode">nano post-receive</span> to edit the
+	<span class="Code">post-receive</span> file.</p>
+<p>Use the following in the <span class="Code">post-receive</span> file.</p>
+<pre><blockquote>git --work-tree=/var/www/CodingForEntrepreneurs --git-dir=/var/SampleProjects/CodingForEntrepreneurs/.git checkout -f</blockquote></pre>
+
+<h2>References</h2>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/core/install/linux-snap">
+	Install .NET on Linux with Snap - .NET | Microsoft Docs</a></p>
+<p><a href="https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-ver16&pivots=cs1-bash">
+	Docker: Install containers for SQL Server on Linux - SQL Server | Microsoft Learn</a></p>
+<p><a href="https://www.codingforentrepreneurs.com/blog/git-push-local-code-to-live-linux-server">
+	Git Push Local Code to Live Linux Server - Blog Post - codingforentrepreneurs.com</a></p>
+<p><a href="https://daveceddia.com/deploy-git-repo-to-server">
+	Deploy a Project to Your Server with Git</a></p>
+
+</body>
+</html>

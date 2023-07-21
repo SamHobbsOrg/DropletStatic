@@ -7,15 +7,13 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
           ls ${{ github.workspace }}/public
 
-      - name: Deploy to Staging server
+      - name: Deploy
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DROPLET_KEY_SECRET }}
@@ -23,13 +21,13 @@ jobs:
           SOURCE: "public/"
           REMOTE_HOST: ${{ secrets.DROPLET_HOST_SECRET}}
           REMOTE_USER: ${{ secrets.DROPLET_USERNAME_SECRET }}
-          TARGET: /var/www/webpage-editor.com
+          TARGET: /var/www/html
           SCRIPT_BEFORE: |
             whoami
-            ls /var/www/webpage-editor.com
+            ls /var/www/html
           SCRIPT_AFTER: |
             whoami
-            ls /var/www/webpage-editor.com
+            ls /var/www/html
             echo $RSYNC_STDOUT
  
       - run: echo "🍏 This job's status is ${{ job.status }}."
