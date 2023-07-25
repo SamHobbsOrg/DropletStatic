@@ -17,7 +17,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.DROPLET_HOST_SECRET}}
           REMOTE_USER: ${{ secrets.DROPLET_USERNAME_SECRET }}
           TARGET: /var/www/html
-          SCRIPT_AFTER: |
-            echo "Std. Out: $RSYNC_STDOUT"
  
       - run: echo "🍏 This job's status is ${{ job.status }}."
